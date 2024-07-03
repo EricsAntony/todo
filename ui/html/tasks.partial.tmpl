@@ -1,0 +1,48 @@
+{{define "list"}}
+    {{if eq (len .Snippets) 0}}
+    Your task list is empty
+    {{else}}
+    <p>All Tasks</p>
+        {{range .Snippets}}
+        <div class="list-div">
+            <form class="form" method="POST" action="/delete">
+
+                <p class="title"><strong>{{.Title}}</strong></p><br>
+                <p class="title">Assigned: {{.Created}}</p><br>
+                <p class="title">Due date: {{.Expires}}</p><br>
+                {{range .Tag}}
+                    {{if ne . " "}}
+                    <span class="tag"><a style="text-decoration: none; font-size: 12px;" href="/tagSection?tag={{.}}">{{.}}</a></span>
+                    {{end}}
+                {{end}}
+                <input type="hidden" name="id" value="{{.Id}}">
+                <input type="submit" name="del" value="Remove" class="input-submit-new"/>
+            </form>
+
+            <div class="form">
+             <form method="POST" action="/update">
+                    <input type="hidden" name="id" value="{{.Id}}">
+                    <input type="text" name="updateDesc" placeholder="Update Description" required/>
+                    <input type="submit" class="input-submit-new"/>
+                </form>
+                <form  method="POST" action="/tags">
+                    <input type="hidden" name="id" value="{{.Id}}">
+                    <input type="text" name="tags" placeholder="Add Tags" required/>
+                    <input type="submit" class="input-submit-new"/>
+                </form>
+            </div>
+               
+            </div>
+        {{end}}
+    {{end}}
+{{end}}
+{{define "errors"}}
+    <div style="width:800px; margin:0 auto;">
+        {{with .Form}}
+        <label class='error'>{{.Errors.Get "task"}}</label>
+        {{end}}
+    </div>
+{{end}}
+{{define "successMessage"}}
+<div class='flash '>{{.Flash}}</div>
+{{end}}
